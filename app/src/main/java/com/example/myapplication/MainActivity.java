@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,9 +18,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    double a,b,kq = 0.0;
-    EditText txtA,txtB;
+    float a,b,kq;
+    EditText num1,num2;
     TextView result;
+    SharedPreferences spr;
+
+    public static final String mypreference = "mypref";
+    public static final String Number1 = "numberKey1";
+    public static final String Number2 = "numberKey2";
+    public static final String Result = "resultKey";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +37,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button tru = (Button) findViewById(R.id.tru);
         Button nhan = (Button) findViewById(R.id.nhan);
         Button chia = (Button) findViewById(R.id.chia);
-        txtA = (EditText) findViewById(R.id.first_number);
-        txtB = (EditText) findViewById(R.id.second_number);
+        num1 = (EditText) findViewById(R.id.first_number);
+        num2 = (EditText) findViewById(R.id.second_number);
         result = (TextView) findViewById(R.id.result);
+
+        spr = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+
+        if(spr.contains(Number1)) {
+            num1.setText(spr.getString(Number1, ""));
+        }
+        if(spr.contains(Number2)) {
+            num2.setText(spr.getString(Number2, ""));
+        }
+        if(spr.contains(Result)) {
+            result.setText(spr.getString(Result, ""));
+        }
 
         cong.setOnClickListener(this);
         tru.setOnClickListener(this);
@@ -41,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        a = Double.parseDouble(txtA.getText().toString());
-        b = Double.parseDouble(txtB.getText().toString());
+        a = Float.parseFloat(num1.getText().toString());
+        b = Float.parseFloat(num2.getText().toString());
 
         switch(v.getId())
         {
@@ -74,5 +95,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
         }
+        String number1 = num1.getText().toString();
+        String number2 = num2.getText().toString();
+        String kq = result.getText().toString();
+        save(number1, number2, kq);
+    }
+
+    public void save(String a, String b, String c) {
+        SharedPreferences.Editor editor = spr.edit();
+        editor.putString(Number1, a);
+        editor.putString(Number2, b);
+        editor.putString(Result, c);
+
     }
 }
