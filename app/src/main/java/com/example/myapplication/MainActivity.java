@@ -106,6 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.putString(Number1, a);
         editor.putString(Number2, b);
         editor.putString(Result, c);
-
+        editor.commit();
     }
 }
